@@ -6,19 +6,25 @@ RSpec.describe Services::CampaignComparator do
   let(:local_campaign) do
     Campaign.new(external_reference: '1', status: 'enabled', ad_description: 'Description for campaign 11')
   end
-  let(:remote_campaign) do
-    Structs::RemoteCampaign.new('1', 'enabled', 'Description for campaign 99')
-  end
 
   subject(:campaign_comparator) do
     described_class.new(local_campaign: local_campaign, remote_campaign: remote_campaign)
   end
 
   describe '#call' do
-    let(:expected_discrepancies) do
-      { description: { local: 'Description for campaign 11', remote: 'Description for campaign 99' } }
+    context 'when remote and local compaign have no discrepancies' do
+      let(:remote_campaign) { Structs::RemoteCampaign.new('1', 'enabled', 'Description for campaign 11') }
+
+      it { expect(campaign_comparator.call).to eq({}) }
     end
 
-    it { expect(campaign_comparator.call).to eq(expected_discrepancies) }
+    context 'when remote and local compaign have a different description' do
+      let(:remote_campaign) { Structs::RemoteCampaign.new('1', 'enabled', 'Description for campaign 99') }
+
+      it do
+        expect(campaign_comparator.call)
+          .to eq({ description: { local: 'Description for campaign 11', remote: 'Description for campaign 99' } })
+      end
+    end
   end
 end
