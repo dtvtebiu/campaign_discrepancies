@@ -10,13 +10,13 @@ module Services
     end
 
     def call
-      ATTRIBUTE_NAME_MAPPING.each_with_object({}) do |(remote_attribute_name, local_attribute_name), hash|
+      ATTRIBUTE_NAME_MAPPING.each_with_object({}) do |(remote_attribute_name, local_attribute_name), discrepancy|
         remote_attribute_value = @remote_campaign.send(remote_attribute_name)
         local_attribute_value = @local_campaign.send(local_attribute_name)
 
         next if remote_attribute_value == local_attribute_value
 
-        hash[remote_attribute_name] = { remote: remote_attribute_value, local: local_attribute_value }
+        discrepancy[remote_attribute_name] = { remote: remote_attribute_value, local: local_attribute_value }
       end
     end
   end
