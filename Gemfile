@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rake', '12.3.2'
+gem 'rake', '12.3.3'
 gem 'sequel', '5.20.0'
 gem 'sqlite3', '1.4.1'
 
